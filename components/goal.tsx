@@ -10,7 +10,7 @@ export default function GoalDataCard(props: GoalProps) {
   return (
     <div className="bg-slate-100/70 rounded-[6px] p-5">
       <section className="flex justify-between gap-2 pb-2">
-        <p>Goal Progress</p>
+        <p>Progrès</p>
         <Target className="h-4 w-4" />
       </section>
       <div className="gap-3 pt-2">
@@ -23,8 +23,8 @@ export default function GoalDataCard(props: GoalProps) {
           </div>
         </section>
         <div className="flex justify-between text-sm opacity-50 pt-3">
-          <p>Goal: ${props.goal}</p>
-          <p>${Math.round(props.value) * 10} made</p>
+          <p>Objectif: ${props.goal}</p>
+          <p>${Math.round(props.value) * 10} obtenu</p>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ export type UserDataProps = {
 };
 
 export default function UserDataCard(props: UserDataProps) {
-  const defaultImage = "./photo.jpeg";
+  const defaultImage = "../app/photo.png";
   return (
     <div className="flex flex-wrap justify-between gap-3">
       <section className="flex justify-between gap-3">
@@ -15,7 +15,7 @@ export default function UserDataCard(props: UserDataProps) {
             width={300}
             height={300}
             src={props.image || defaultImage}
-            alt="avatar"
+            alt=""
             className="rounded-full h-12 w-12"
           />
         </div>

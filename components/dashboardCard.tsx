@@ -1,4 +1,6 @@
+
 import {LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 interface DashboardCardProps {
   label: string;
   Icon: LucideIcon;
@@ -17,5 +19,18 @@ export const DashboardCard = ({ label, Icon, amount, description }: DashboardCar
           <p className="text-sm">{description}</p>
         </section>
       </div>
-    );
+    )
+}
+export function DashboardCardContent(
+  props: React.HTMLAttributes<HTMLDivElement>
+) {
+  return (
+    <div
+      {...props}
+      className={cn(
+        "flex w-full flex-col gap-3 rounded-[6px] p-5 shadow bg-slate-100/40",
+        props.className
+      )}
+    />
+  );
 }

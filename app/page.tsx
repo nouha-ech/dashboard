@@ -1,12 +1,12 @@
-import { DashboardCard, DashboardCardContent } from "@/components/dashboard-card";
+import { DashboardCard, DashboardCardContent } from "@/components/dashboardCard";
 import UserDataCard, { UserDataProps } from "@/components/user-data-card";
 import { db } from "@/lib/db";
 import { Calendar, CreditCard, DollarSign, PersonStanding, UserPlus, UserRoundCheck } from "lucide-react";
 import { eachMonthOfInterval, endOfMonth, format, formatDistanceToNow, startOfMonth } from "date-fns";
 import UserPurchaseCard, { UserPurchaseProps } from "@/components/user-purchase-card";
 import BarChart from "@/components/barchart";
-import lineGraph from "@/components/line-graph";
 import GoalDataCard from "@/components/goal";
+import LineGraph from "@/components/line-graph";
 
 export default async function Dashboard() {
   const currentDate = new Date()
@@ -35,7 +35,7 @@ export default async function Dashboard() {
   const totalAmount = salesTotal._sum.amount || 0 
 
   // Goal Amounts
-  const goalAmount = 1000;
+  const goalAmount = 10000;
   const goalProgress = totalAmount / goalAmount * 100
 
   // Fetch Recent Users
@@ -47,10 +47,10 @@ export default async function Dashboard() {
   });
 
   // User Data
-  const UserData: UserDataProps[] = recentUsers.map((account) => ({
+  const UserData: UserDataProps[] = recentUsers.map((account: { name: any; email: any; image: any; createdAt: string | number | Date; }) => ({
     name: account.name || 'Unknown',
     email: account.email || 'Unknown',
-    image: account.image || './mesh.png',
+    image: account.image || './photo.jpeg',
     time: formatDistanceToNow(new Date(account.createdAt), {addSuffix: true})
   }))
 
@@ -65,10 +65,10 @@ export default async function Dashboard() {
     }
   })
 
-  const PurchaseCard: UserPurchaseProps[] = recentSales.map((purchase => ({
+  const PurchaseCard: UserPurchaseProps[] = recentSales.map(((purchase: { user: { name: any; email: any; image: any; }; amount: any; }) => ({
     name: purchase.user.name || 'Unknown',
     email: purchase.user.email || 'Unknown',
-    image: purchase.user.image || './mesh.png',
+    image: purchase.user.image || './photo.png',
     saleAmount: `$${(purchase.amount || 0).toFixed(2)}`
   })))
 
@@ -87,7 +87,7 @@ export default async function Dashboard() {
     end: endOfMonth(currentDate)
   }).map(month => {
     const monthString = format(month, 'MMM');
-    const userMonthly = usersThisMonth.filter(user => format(new Date(user.createdAt), 'MMM') === monthString).reduce((total, user) => total + user._count.createdAt, 0);
+    const userMonthly = usersThisMonth.filter((user: { createdAt: string | number | Date; }) => format(new Date(user.createdAt), 'MMM') === monthString).reduce((total: any, user: { _count: { createdAt: any; }; }) => total + user._count.createdAt, 0);
     return { month: monthString, total: userMonthly}
     
   })
@@ -108,11 +108,10 @@ export default async function Dashboard() {
     end: endOfMonth(currentDate)
   }).map(month => {
     const monthString = format(month, 'MMM');
-    const salesInMonth = salesThisMonth.filter(sales => format(new Date(sales.createdAt), 'MMM') === monthString).reduce((total, sale) => total + sale._sum.amount!, 0)
+    const salesInMonth = salesThisMonth.filter((sales: { createdAt: string | number | Date; }) => format(new Date(sales.createdAt), 'MMM') === monthString).reduce((total: any, sale: { _sum: { amount: any; }; }) => total + sale._sum.amount!, 0)
     return { month: monthString, total: salesInMonth}
   })
   return (
-    <div>
       <div className="flex flex-col gap-5 w-full">
          <h1 className="text-2xl font-bold text-center mx-6">Global Dashboard</h1>
         <div className="container mx-auto py-8">
