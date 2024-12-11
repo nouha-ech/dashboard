@@ -18,7 +18,7 @@ export default function LineGraph({ data }: LineChartProps) {
   return (
     <div className="shadow w-full flex flex-col gap-3 rounded-[6px] p-5 bg-slate-100/90">
       <section className="flex justify-between gap-2 pb-2">
-        <p>Sales Data</p>
+        <p> Statique des ventes</p>
         <CandlestickChart className="h-4 w-4" />
       </section>
       <ResponsiveContainer width={"100%"} height={350}>

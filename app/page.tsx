@@ -24,7 +24,7 @@ export default async function Dashboard() {
     }
   })
 
-  // Sales Count
+  // Count nbr des ventes 
   const salesCount = await db.purchase.count()
 
   // Sales Total
@@ -35,7 +35,7 @@ export default async function Dashboard() {
   })
   const totalAmount = salesTotal._sum.amount || 0 
 
-  // Goal Amounts
+  // total
   const goalAmount = 10000;
   const goalProgress = totalAmount / goalAmount * 100
 
@@ -51,11 +51,11 @@ export default async function Dashboard() {
   const UserData: UserDataProps[] = recentUsers.map((account: { name: any; email: any; image: any; createdAt: string | number | Date; }) => ({
     name: account.name || 'Unknown',
     email: account.email || 'Unknown',
-    image: account.image || './photo.jpeg',
+    image: account.image || './photo.png',
     time: formatDistanceToNow(new Date(account.createdAt), {addSuffix: true})
   }))
 
-  // Fetch Recent Sales
+  // ventes recentes
   const recentSales = await db.purchase.findMany({
     orderBy: {
       createdAt: 'desc'
@@ -73,7 +73,7 @@ export default async function Dashboard() {
     saleAmount: `$${(purchase.amount || 0).toFixed(2)}`
   })))
 
-  // Users This Month
+  // clients du mois
   const usersThisMonth = await db.user.groupBy({
     by: ['createdAt'],
     _count: {
@@ -93,7 +93,7 @@ export default async function Dashboard() {
     
   })
 
-  // Sales This Month
+  // ventes du mois
   const salesThisMonth = await db.purchase.groupBy({
     by: ['createdAt'],
     _sum: {
@@ -113,74 +113,74 @@ export default async function Dashboard() {
     return { month: monthString, total: salesInMonth}
   })
   return (
-      <div className="flex flex-col gap-5 w-full">
-         <h1 className="text-2xl font-bold text-center mx-6">Global Dashboard</h1>
-        <div className="container mx-auto py-8">
-          <div className="flex flex-col gap-5 w-full">
-            <section className="grid w-full grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 gap-x-8 transition-all">
-              <DashboardCard
-                label={"Total Revenue"}
-                Icon={DollarSign}
-                amount={"Total"}
-                description="All Time"
-              />
-              <DashboardCard
-                label={"Total Revenue"}
-                Icon={DollarSign}
-                amount={"Total"}
-                description="All Time"
-              />
-              <DashboardCard
-                label={"Total Revenue"}
-                Icon={DollarSign}
-                amount={"Total"}
-                description="All Time"
-              />
-              <DashboardCard
-                label={"Total Revenue"}
-                Icon={DollarSign}
-                amount={"Total"}
-                description="All Time"
-              />
-            </section>
-                  <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-all">
-          <DashboardCardContent>
-            <section className="flex justify-between gap-2 pb-2">
-              <p>Recent Users</p>
-              <UserRoundCheck className="h-4 w-4"/>
-            </section>
-            {UserData.map((data, index) => (
-              <UserDataCard 
-                key={index}
-                name={data.name}
-                email={data.email}
-                image={data.image}
-                time={data.time}
-              />
-            ))}
-          </DashboardCardContent>
-          <DashboardCardContent>
-            <section className="flex justify-between gap-2 pb-2">
-              <p>Recent Sales</p>
-              <CreditCard className="h-4 w-4"/>
-            </section>
-            {PurchaseCard.map((data, index) => (
-              <UserPurchaseCard 
-                key={index}
-                name={data.name}
-                email={data.email}
-                image={data.image}
-                saleAmount={data.saleAmount}
-              />
-            ))}
-          </DashboardCardContent>
+    <div className="flex flex-col gap-5 w-full">
+      <h1 className="text-2xl font-bold text-center mx-6">Global Dashboard</h1>
+      <div className="container mx-auto py-8">
+        <div className="flex flex-col gap-5 w-full">
+          <section className="grid w-full grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 gap-x-8 transition-all">
+            <DashboardCard
+              label={"Total des ventes"}
+              Icon={DollarSign}
+              amount={`$${totalAmount}`}
+              description="All Time"
+            />
+            <DashboardCard
+              label={"Total des payements"}
+              Icon={Calendar}
+              amount={`+${salesCount}`}
+              description="All Time"
+            />
+            <DashboardCard
+              label={"Total des clients"}
+              Icon={PersonStanding}
+              amount={`+${userCount}`}
+              description="Total"
+            />
+            <DashboardCard
+              label={"Nouveaux clients"}  
+              Icon={UserPlus}
+              amount={`+${userCountMonth}`}
+              description=" ce mois-ci"
+            />
+          </section>
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-all">
+            <DashboardCardContent>
+              <section className="flex justify-between gap-2 pb-2">
+                <p> clients recents</p>
+                <UserRoundCheck className="h-4 w-4" />
+              </section>
+              {UserData.map((data, index) => (
+                <UserDataCard
+                  key={index}
+                  name={data.name}
+                  email={data.email}
+                  image={data.image}
+                  time={data.time}
+                />
+              ))}
+            </DashboardCardContent>
+            <DashboardCardContent>
+              <section className="flex justify-between gap-2 pb-2">
+                <p>Commandes recents</p>
+                <CreditCard className="h-4 w-4" />
+              </section>
+              {PurchaseCard.map((data, index) => (
+                <UserPurchaseCard
+                  key={index}
+                  name={data.name}
+                  email={data.email}
+                  image={data.image}
+                  saleAmount={data.saleAmount}
+                />
+              ))}
+            </DashboardCardContent>
           </section>
 
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-all">
-            <BarChart data={monthlyUsersData}/>
-            <LineGraph data={monthlySalesData}/>
+            <BarChart data={monthlyUsersData} />
+            <LineGraph data={monthlySalesData} />
           </section>
-          <GoalDataCard goal={goalAmount} value={goalProgress}/>
+          <GoalDataCard goal={goalAmount} value={goalProgress} />
         </div>
       </div>
     </div>

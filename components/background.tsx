@@ -12,7 +12,7 @@ export default function CustomBackground() {
   radial-gradient(at 55% 100%, hsla(230, 85%, 55%, 1) 0px, transparent 50%), /* Medium Blue */
   radial-gradient(at 42% 89%, hsla(240, 80%, 50%, 1) 0px, transparent 50%), /* Darker Blue */
   radial-gradient(at 97% 21%, hsla(250, 75%, 45%, 1) 0px, transparent 50%), /* Deep Blue */
-  radial-gradient(at 69% 43%, hsla(260, 70%, 40%, 1) 0px, transparent 50%);
+  radial-gradient(at 69% 43%, hsla(260, 70%, 40%, 1) 0px, transparent 50%)
                 `,
           }}
         ></div>
