@@ -7,12 +7,12 @@ export default function CustomBackground() {
           className="absolute w-full h-full top-[80px] opacity-15 blur-[100px] saturate-150"
           style={{
             backgroundImage: `
-              radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 1) 0px, transparent 50%),
-              radial-gradient(at 10% 29%, hsla(215, 98%, 61%, 1) 0px, transparent 50%),
-              radial-gradient(at 55% 100%, hsla(285, 98%, 56%, 1) 0px, transparent 50%),
-              radial-gradient(at 42% 89%, hsla(285, 98%, 56%, 1) 0px, transparent 50%),
-              radial-gradient(at 97% 21%, hsla(32, 98%, 61%, 1) 0px, transparent 50%),
-              radial-gradient(at 69% 43%, hsla(32, 98%, 61%, 1)  0px, transparent 50%)
+          radial-gradient(at 27% 37%, hsla(210, 95%, 65%, 1) 0px, transparent 50%), /* Light Blue */
+  radial-gradient(at 10% 29%, hsla(220, 90%, 60%, 1) 0px, transparent 50%), /* Slightly Darker Blue */
+  radial-gradient(at 55% 100%, hsla(230, 85%, 55%, 1) 0px, transparent 50%), /* Medium Blue */
+  radial-gradient(at 42% 89%, hsla(240, 80%, 50%, 1) 0px, transparent 50%), /* Darker Blue */
+  radial-gradient(at 97% 21%, hsla(250, 75%, 45%, 1) 0px, transparent 50%), /* Deep Blue */
+  radial-gradient(at 69% 43%, hsla(260, 70%, 40%, 1) 0px, transparent 50%);
                 `,
           }}
         ></div>

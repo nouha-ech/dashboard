@@ -8,6 +8,7 @@ import BarChart from "@/components/barchart";
 import GoalDataCard from "@/components/goal";
 import LineGraph from "@/components/line-graph";
 
+
 export default async function Dashboard() {
   const currentDate = new Date()
   // User Count
