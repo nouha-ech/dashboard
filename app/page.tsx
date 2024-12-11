@@ -8,6 +8,16 @@ import UserPurchaseCard, { UserPurchaseProps } from "@/components/user-purchase-
 
 
 
+ const monthlyUsersData = eachMonthOfInterval({
+    start: startOfMonth(new Date(usersThisMonth[0]?.createdAt || new Date())),
+    end: endOfMonth(currentDate)
+  }).map(month => {
+    const monthString = format(month, 'MMM');
+    const userMonthly = usersThisMonth.filter(user => format(new Date(user.createdAt), 'MMM') === monthString).reduce((total, user) => total + user._count.createdAt, 0);
+    return { month: monthString, total: userMonthly}
+    
+  })
+
 
 
   // Fetch Recent Users
