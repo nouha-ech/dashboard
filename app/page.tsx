@@ -61,6 +61,7 @@ export default function Home() {
   return (
     <div>
       <div className="flex flex-col gap-5 w-full">
+         <h1 className="text-2xl font-bold text-center mx-6">Global Dashboard</h1>
         <div className="container mx-auto py-8">
           <div className="flex flex-col gap-5 w-full">
             <section className="grid w-full grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 gap-x-8 transition-all">
@@ -89,7 +90,7 @@ export default function Home() {
                 description="All Time"
               />
             </section>
-                 <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-all">
+                  <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-all">
           <DashboardCardContent>
             <section className="flex justify-between gap-2 pb-2">
               <p>Recent Users</p>
@@ -105,8 +106,28 @@ export default function Home() {
               />
             ))}
           </DashboardCardContent>
-      
+          <DashboardCardContent>
+            <section className="flex justify-between gap-2 pb-2">
+              <p>Recent Sales</p>
+              <CreditCard className="h-4 w-4"/>
+            </section>
+            {PurchaseCard.map((data, index) => (
+              <UserPurchaseCard 
+                key={index}
+                name={data.name}
+                email={data.email}
+                image={data.image}
+                saleAmount={data.saleAmount}
+              />
+            ))}
+          </DashboardCardContent>
+          </section>
 
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-all">
+            <BarChart data={monthlyUsersData}/>
+            <LineGraph data={monthlySalesData}/>
+          </section>
+          <GoalDataCard goal={goalAmount} value={goalProgress}/>
         </div>
       </div>
     </div>
