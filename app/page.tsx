@@ -34,6 +34,20 @@ export default function Home() {
                 description="All Time"
               />
             </section>
+             <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 transition-all">
+          <DashboardCardContent>
+            <section className="flex justify-between gap-2 pb-2">
+              <p>Recent Users</p>
+              <UserRoundCheck className="h-4 w-4"/>
+            </section>
+            {UserData.map((data, index) => (
+              <UserDataCard 
+                
+                name='nouha'
+                email='./photo.jpeg'
+                image='nouhailaechchnaoui@gmail.com'
+                time='2 days ago'
+              />
           </div>
         </div>
       </div>
