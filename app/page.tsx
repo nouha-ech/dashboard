@@ -1,24 +1,42 @@
-
 import { DashboardCard, DashboardCardContent } from "@/components/dashboard-card";
 import UserDataCard, { UserDataProps } from "@/components/user-data-card";
 import { db } from "@/lib/db";
 import { Calendar, CreditCard, DollarSign, PersonStanding, UserPlus, UserRoundCheck } from "lucide-react";
 import { eachMonthOfInterval, endOfMonth, format, formatDistanceToNow, startOfMonth } from "date-fns";
 import UserPurchaseCard, { UserPurchaseProps } from "@/components/user-purchase-card";
+import BarChart from "@/components/barchart";
+import lineGraph from "@/components/line-graph";
+import GoalDataCard from "@/components/goal";
 
+export default async function Dashboard() {
+  const currentDate = new Date()
+  // User Count
+  const userCount = await db.user.count()
 
-
- const monthlyUsersData = eachMonthOfInterval({
-    start: startOfMonth(new Date(usersThisMonth[0]?.createdAt || new Date())),
-    end: endOfMonth(currentDate)
-  }).map(month => {
-    const monthString = format(month, 'MMM');
-    const userMonthly = usersThisMonth.filter(user => format(new Date(user.createdAt), 'MMM') === monthString).reduce((total, user) => total + user._count.createdAt, 0);
-    return { month: monthString, total: userMonthly}
-    
+  // Users Count This Month
+  const userCountMonth = await db.user.count({
+    where: {
+      createdAt: {
+        gte: startOfMonth(currentDate),
+        lte: endOfMonth(currentDate)
+      }
+    }
   })
 
+  // Sales Count
+  const salesCount = await db.purchase.count()
 
+  // Sales Total
+  const salesTotal = await db.purchase.aggregate({
+    _sum: {
+      amount: true
+    }
+  })
+  const totalAmount = salesTotal._sum.amount || 0 
+
+  // Goal Amounts
+  const goalAmount = 1000;
+  const goalProgress = totalAmount / goalAmount * 100
 
   // Fetch Recent Users
   const recentUsers = await db.user.findMany({
@@ -29,15 +47,52 @@ import UserPurchaseCard, { UserPurchaseProps } from "@/components/user-purchase-
   });
 
   // User Data
- const UserData: UserDataProps[] = recentUsers.map((account) => ({
+  const UserData: UserDataProps[] = recentUsers.map((account) => ({
     name: account.name || 'Unknown',
     email: account.email || 'Unknown',
     image: account.image || './mesh.png',
     time: formatDistanceToNow(new Date(account.createdAt), {addSuffix: true})
   }))
 
+  // Fetch Recent Sales
+  const recentSales = await db.purchase.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    },
+    take: 7,
+    include: {
+      user: true
+    }
+  })
 
-   // monthly sames
+  const PurchaseCard: UserPurchaseProps[] = recentSales.map((purchase => ({
+    name: purchase.user.name || 'Unknown',
+    email: purchase.user.email || 'Unknown',
+    image: purchase.user.image || './mesh.png',
+    saleAmount: `$${(purchase.amount || 0).toFixed(2)}`
+  })))
+
+  // Users This Month
+  const usersThisMonth = await db.user.groupBy({
+    by: ['createdAt'],
+    _count: {
+      createdAt: true
+    },
+    orderBy: {
+      createdAt: 'asc'
+    }
+  })
+  const monthlyUsersData = eachMonthOfInterval({
+    start: startOfMonth(new Date(usersThisMonth[0]?.createdAt || new Date())),
+    end: endOfMonth(currentDate)
+  }).map(month => {
+    const monthString = format(month, 'MMM');
+    const userMonthly = usersThisMonth.filter(user => format(new Date(user.createdAt), 'MMM') === monthString).reduce((total, user) => total + user._count.createdAt, 0);
+    return { month: monthString, total: userMonthly}
+    
+  })
+
+  // Sales This Month
   const salesThisMonth = await db.purchase.groupBy({
     by: ['createdAt'],
     _sum: {
@@ -56,8 +111,6 @@ import UserPurchaseCard, { UserPurchaseProps } from "@/components/user-purchase-
     const salesInMonth = salesThisMonth.filter(sales => format(new Date(sales.createdAt), 'MMM') === monthString).reduce((total, sale) => total + sale._sum.amount!, 0)
     return { month: monthString, total: salesInMonth}
   })
-
-export default function Home() {
   return (
     <div>
       <div className="flex flex-col gap-5 w-full">
