@@ -36,6 +36,27 @@ import UserPurchaseCard, { UserPurchaseProps } from "@/components/user-purchase-
     time: formatDistanceToNow(new Date(account.createdAt), {addSuffix: true})
   }))
 
+
+   // monthly sames
+  const salesThisMonth = await db.purchase.groupBy({
+    by: ['createdAt'],
+    _sum: {
+      amount: true
+    },
+    orderBy: {
+      createdAt: 'asc'
+    }
+  })
+
+  const monthlySalesData = eachMonthOfInterval({
+    start: startOfMonth(new Date(salesThisMonth[0]?.createdAt || new Date())),
+    end: endOfMonth(currentDate)
+  }).map(month => {
+    const monthString = format(month, 'MMM');
+    const salesInMonth = salesThisMonth.filter(sales => format(new Date(sales.createdAt), 'MMM') === monthString).reduce((total, sale) => total + sale._sum.amount!, 0)
+    return { month: monthString, total: salesInMonth}
+  })
+
 export default function Home() {
   return (
     <div>
