@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "postinstall": "prisma generate",
+    "postdeploy": "prisma migrate deploy",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,6 +15,7 @@
     "@radix-ui/react-progress": "^1.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dashboard": "file:",
     "date-fns": "^4.1.0",
     "lucide": "^0.468.0",
     "lucide-react": "^0.468.0",
